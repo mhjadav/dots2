@@ -1,0 +1,104 @@
+<html>
+
+<head>
+    <style>
+        .dailog-div {
+            color: rgb(255, 255, 255);
+            background-color: rgb(0, 0, 0);
+            display: block;
+            position: relative;
+            margin: 0 auto;
+            text-align: center;
+            height: 100%;
+            padding: 5%;
+
+        }
+
+        .dailog-message {
+            padding: 1%;
+        }
+
+        .dailog-button {
+            background-color: #FFB90B;
+            background-image: none;
+            border-style: none;
+            border-color: transparent;
+            cursor: pointer;
+            color: #fff;
+            display: inline-block;
+            font-family: inherit;
+            font-size: 12px;
+            line-height: 20px;
+            margin-right: .3em;
+            margin-bottom: 0;
+            outline: none;
+            padding: 2px 10px;
+            text-align: center;
+            text-decoration: none;
+            text-shadow: 0 -1px 0 rgba(0, 0, 0, .25);
+            vertical-align: middle;
+        }
+    </style>
+</head>
+
+<body>
+    <div style="width:500px; margin:0 auto;">
+        <div class="dailog-div">
+            <div>
+                <span class="dailog-message">Would you like to load widget?</span>
+                <input type="button" value="Ok" onclick="addwidgetOne(this)" class="dailog-button" />
+                <input type="button" value="Cancel" onclick="removeDailog(this)" class="dailog-button" />
+            </div>
+        </div>
+        <script type="text/javascript">
+            baseUrl = "https://widgets.cryptocompare.com/";
+
+            var scripts = document.getElementsByTagName("script");
+
+            var embedder = scripts[0];
+
+            var cccTheme = {
+                "General": {
+                    "borderColor": "#4C5C68",
+                    "showExport": true
+                },
+                "Tabs": {
+                    "borderColor": "#4C5C68",
+                    "activeBorderColor": "#1985A1"
+                },
+                "Chart": {
+                    "animation": true,
+                    "fillColor": "#1985A1"
+                }
+            };
+
+            function addwidgetOne(e) {
+                var appName = encodeURIComponent(window.location.hostname);
+                if (appName == "") {
+                    appName = "local";
+                }
+                var s = document.createElement("script");
+
+                s.type = "text/javascript";
+
+                s.async = true;
+
+                var theUrl = baseUrl + 'serve/v3/coin/chart?fsym=ADX&tsyms=EUR,USD,BTC,GOLD';
+
+                s.src = theUrl + (theUrl.indexOf("?") >= 0 ? "&" : "?") + "app=" + appName;
+
+                embedder.parentNode.appendChild(s);
+                e.parentNode.parentNode.remove();
+            };
+
+            function removeDailog(e) {
+                e.parentNode.parentNode.remove();
+            }
+        </script>
+    </div>
+
+    
+
+</body>
+
+</html>

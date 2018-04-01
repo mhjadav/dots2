@@ -1,0 +1,62 @@
+<html lang="en">
+
+<head>
+    <title>Dots Math Game</title>
+    <meta charset="UTF-8" />
+    <meta name="description" content="You are now playing the Dots Math Game at Math-Drills.com where a simple line segment can lead to all sorts of fun."
+    />
+    <meta name="keywords" content="dots,math,game,strategy,mathematics,spatial" />
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/main.js"></script>
+</head>
+
+<body onload="dots_ini()">
+    <h1 style="text-align: center; color: #003366;">Dots Math Game</h1>
+    <center>
+        <form name="f" action="">
+                <table bgcolor="#ffffff" border="0" cellpadding="0" cellspacing="0" id="dotsTable">
+                </table>
+          
+        </form>
+    </center>
+    <script>    
+            var maxTDperTR = 15;
+            var maxTR = 16;
+    
+            var strHtml = "";
+            var x = 1;
+            var i = 0;
+            for(var r =1; r < maxTR; r++){
+                strHtml += "<tr>"
+                for(var c = 1; c <= maxTDperTR; ){
+                    var width = 30;
+                    var height = 5;
+                    if(r % 2 != 0){
+                        strHtml += '<td align="center"><input type="radio" name="x'+ x +'" onclick="convert('+ x +');" /></td>';
+                        x++;
+                        c++;
+                    } else {
+                        if(c % 2 === 0){
+                            width = 30;
+                            height = 30;
+                        } else {
+                            width =5;
+                            height=30;
+                        }
+                    }
+                    if(!(c === 16 && r % 2 != 0)){
+                        strHtml += '<td align="center"><img alt="" name="i'+ i +'" src="images/clear.gif" width="'+ width +'" height="'+ height +'" /></td>'
+                        i++;     
+                    }
+                    c++;      
+                    console.log(x,i,c, r);
+                }
+            }
+            strHtml += '<tr><td bgcolor="silver" colspan="7"> Computer:<input type="text" name="comp" size="2" value="0" /></td>';
+            strHtml += '<td bgcolor="silver" colspan="5">Player:<input type="text" name="plyr" size="2" value="0" /></td>';
+            strHtml += '<td bgcolor="silver" colspan="3"><input type="button" value="Reset" onclick="window.location=window.location;" /></td></tr>';
+            $("#dotsTable").html(strHtml);     
+        </script>
+</body>
+
+</html>
