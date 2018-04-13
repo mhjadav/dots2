@@ -15,7 +15,7 @@ var renderGrid = function () {
         for (var c = 1; c <= maxTDperTR;) {
             var width = 35;
             var height = 6;
-            var imageUrl = '/dots/images/clearline.gif';
+            var imageUrl = 'images/clearline.gif';
             var eventName = "convert(" + i + ");";
             var addValue = '';
             var addValueParamsOne = [];
@@ -63,7 +63,7 @@ var renderGrid = function () {
                 if (c % 2 === 0) {
                     width = 30;
                     height = 30;
-                    imageUrl = '/dots/images/clear.gif';
+                    imageUrl = 'images/clear.gif';
                     eventName = "";
                 } else {
                     width = 8;

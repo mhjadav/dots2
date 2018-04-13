@@ -27,8 +27,8 @@
         if (occ[t] != 1) {
             occ[t] = 1;
             var target = $("[name=i" + t + "]")[0];
-            if (compgo == 1) target.src = "/dots/images/blue.gif";
-            else target.src = "/dots/images/red.gif";
+            if (compgo == 1) target.src = "images/blue.gif";
+            else target.src = "images/red.gif";
             gridParams[t];
             if (gridParams[t].addValueParamsOne.length > 0) {
                 ad.apply(this, gridParams[t].addValueParamsOne);
@@ -46,11 +46,11 @@
         if (box[t] == 15) {
             var target = $("[name=i" + t + "]")[0];
             if (compgo == 1) {
-                target.src = "/dots/images/blue.gif";
+                target.src = "images/blue.gif";
                 document.f.comp.value++;
                 hit = 1;
             } else {
-                target.src = "/dots/images/red.gif";
+                target.src = "images/red.gif";
                 document.f.plyr.value++;
                 hit = 1;
             }
