@@ -1,2 +1,2 @@
 # dots
-# https://mojaave.com/dots
+# http://mojaave.com/dots
