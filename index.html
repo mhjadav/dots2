@@ -8,30 +8,43 @@
     <meta name="keywords" content="dots,math,game,strategy,mathematics,spatial" />
 
     <style>
-        /* @media only screen and (max-width: 1200px) {
+        @media only screen and (max-width: 1200px) {
             form {
                 zoom: 2;
             }
-        } */
+        }
 
         input[type=text] {
             width: 80px !important;
             height: 20px;
             text-align: center;
         }
+
         .form-group {
             float: left;
             margin-right: 10px;
         }
+
+        .alert {
+            margin-bottom: 5px;
+            padding: 5px;
+        }
+        .alert-success{
+            background: #80b565;
+        }
+        .alert-danger{
+            background: #ea8a8a;
+        }
+        
     </style>
 </head>
 
 <body>
 
     <center>
-        
-        <form style="max-width:397px;" name="f" >
-        <h1 style="text-align:center;color: #003366;">Dots Math Game</h1>            
+
+        <form style="max-width:397px;" name="f">
+            <h1 style="text-align:center;color: #003366;">Dots Math Game</h1>
             <div class="form-group">
                 <label for="comp">Computer:</label>
                 <input type="text" class="form-control" id="comp" value="0" name="comp">
@@ -50,7 +63,7 @@
             <div class="alert alert-danger" id="resultl">
                 <strong>Opps You loose!</strong>
             </div>
-            <table bgcolor="#ffffff" border="0" cellpadding="0" cellspacing="0" id="dotsTable" class="table">
+            <table bgcolor="#ffffff" border="0" cellpadding="0" cellspacing="0" id="dotsTable">
             </table>
 
         </form>
