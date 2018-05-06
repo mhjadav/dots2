@@ -9,6 +9,8 @@
     function init() {
         $("#resultw").hide();
         $("#resultl").hide();
+        document.f.comp.value = 0;
+        document.f.plyr.value = 0;
         compgo = 0;
         hit = 0;
         t1 = 0;
