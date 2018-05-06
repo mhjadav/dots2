@@ -7,6 +7,8 @@
     var occ;
 
     function init() {
+        $("#resultw").hide();
+        $("#resultl").hide();
         compgo = 0;
         hit = 0;
         t1 = 0;
@@ -17,7 +19,28 @@
         _.fill(occ, 0);
     }
     init()
-
+    function dotClick(dotIndex){
+        console.log(dotIndex,lineIndexArray[dotIndex]);
+        if(t1 === 0){
+            t1 = dotIndex;
+        } else if(t2 === 0 && dotIndex != t1){
+            t2 = dotIndex;
+        }
+        if(t2 != 0 && t2 != t1){
+            var matched = _.filter(lineIndexArray[t1], (value, index) =>{
+                return lineIndexArray[t2].indexOf(value) > -1;
+            });
+            if(matched.length > 0){
+                convert(matched[0]);
+                console.log("Match Line", matched);
+            }
+            $("[name=x" + t1 + "]").prop("checked", false);
+            $("[name=x" + t2 + "]").prop("checked", false);
+            t2 = 0;
+            t1 = 0;
+        }
+        
+    }
     function convert(t) {
         go(parseInt(t));
         if (compgo == 1) reply();
@@ -27,8 +50,8 @@
         if (occ[t] != 1) {
             occ[t] = 1;
             var target = $("[name=i" + t + "]")[0];
-            if (compgo == 1) target.src = "images/blue.gif";
-            else target.src = "images/red.gif";
+            if (compgo == 1) target.src = "/dots/images/blue.gif";
+            else target.src = "/dots/images/red.gif";
             gridParams[t];
             if (gridParams[t].addValueParamsOne.length > 0) {
                 ad.apply(this, gridParams[t].addValueParamsOne);
@@ -46,11 +69,11 @@
         if (box[t] == 15) {
             var target = $("[name=i" + t + "]")[0];
             if (compgo == 1) {
-                target.src = "images/blue.gif";
+                target.src = "/dots/images/blue.gif";
                 document.f.comp.value++;
                 hit = 1;
             } else {
-                target.src = "images/red.gif";
+                target.src = "/dots/images/red.gif";
                 document.f.plyr.value++;
                 hit = 1;
             }
@@ -59,12 +82,14 @@
             var total = computerTotal + playerTotal;
             if (total >= 49) {
                 if (playerTotal > computerTotal) {
-                    window.alert("Game Over. \n Score : Computer: " + computerTotal + ", Your: " + playerTotal + " \n You won.")
+                    $("#resultw").show();
+                    //window.alert("Game Over. \n Score : Computer: " + computerTotal + ", Your: " + playerTotal + " \n You won.")
                 } else {
-                    window.alert("Game Over. \n Score: Computer: " + computerTotal + ", Your: " + playerTotal + " \n You lost.")
+                    $("#resultl").show();
+                    //window.alert("Game Over. \n Score: Computer: " + computerTotal + ", Your: " + playerTotal + " \n You lost.")
                 }
-                init();                
-                renderGrid();
+                //init();                
+                //renderGrid();
             }
         }
     }
@@ -1025,6 +1050,6 @@
             }
         }
     }
-    window.convert = convert;
+    window.dotClick = dotClick;
     window.init = init;
 })();

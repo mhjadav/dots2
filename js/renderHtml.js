@@ -2,20 +2,28 @@ $(document).ready(function () {
     renderGrid();
 });
 var gridParams = {};
+var lineIndexArray = [];
 var renderGrid = function () {
     var maxTDperTR = 15;
     var maxTR = 15;
 
+    // var strHtml = '<tr><td bgcolor="silver" colspan="7"> Computer:<input type="text" name="comp" size="2" value="0" style="width: 50%;text-align: center;" /></td>';
+    // strHtml += '<td bgcolor="silver" colspan="5">Player:<input type="text" name="plyr" size="2" value="0" style="width: 50%;text-align: center;"/></td>';
+    // strHtml += '<td bgcolor="silver" colspan="3"><input type="button" value="Reset" onclick="renderGrid();init();" /></td></tr><tr class="spacer"><td style="padding-bottom: 1em;x"></td></tr>';
     var strHtml = "";
     var x = 1;
     var i = 0;
     var boxIndex = 6;
+    var lastXValue = x;
     for (var r = 1; r <= maxTR; r++) {
         strHtml += "<tr>"
+        if(r % 2 != 0 && x != 1){
+            x = lastXValue;
+        }
         for (var c = 1; c <= maxTDperTR;) {
             var width = 35;
             var height = 6;
-            var imageUrl = 'images/clearline.gif';
+            var imageUrl = '/dots/images/clear.gif';
             var eventName = "convert(" + i + ");";
             var addValue = '';
             var addValueParamsOne = [];
@@ -56,14 +64,23 @@ var renderGrid = function () {
             }
 
             if (r % 2 != 0) {
-                strHtml += '<td align="center"><input type="radio" name="x' + x + '" onclick="this.checked=false;" /></td>';
+                strHtml += '<td align="center"><input type="radio" name="x' + x + '" onclick="dotClick(' + x + ');" /></td>';
+                if(!_.isArray(lineIndexArray[x])){
+                    lineIndexArray[x] = []
+                }
+                if(!_.isArray(lineIndexArray[x+1])){
+                    lineIndexArray[x+1] = []
+                }
+                lineIndexArray[x].push(i);
+                lineIndexArray[x+1].push(i);
                 x++;
                 c++;
+                lastXValue = x;
             } else {
                 if (c % 2 === 0) {
                     width = 30;
                     height = 30;
-                    imageUrl = 'images/clear.gif';
+                    imageUrl = '/dots/images/clear.gif';
                     eventName = "";
                 } else {
                     width = 8;
@@ -71,26 +88,29 @@ var renderGrid = function () {
                 }
             }
             if (!(c === 16 && r % 2 != 0)) {
-                strHtml += '<td align="center"><img alt="" onclick="'
-                // if(addValueParamsOne.length > 0){
-                //     strHtml += 'adValue(' + addValueParamsOne.join() + ');';                    
-                // }
-                // if(addValueParamsTwo.length > 0){
-                //     strHtml += 'adValue(' + addValueParamsTwo.join() + ');';                    
-                // }
+                strHtml += '<td align="center"><img alt=""'
                 gridParams[i] = {
                     addValueParamsTwo: addValueParamsTwo,
                     addValueParamsOne: addValueParamsOne
                 }
-                strHtml += eventName + '"';
-                strHtml += ' name="i'+ i +'" src="' + imageUrl + '" width="' + width + '" height="' + height + '" /></td>'
+                if (r % 2 === 0 && c % 2 != 0) {
+                    if(!_.isArray(lineIndexArray[x])){
+                        lineIndexArray[x] = []
+                    }
+                    if(!_.isArray(lineIndexArray[x-8])){
+                        lineIndexArray[x-8] = []
+                    }
+                    lineIndexArray[x].push(i);
+                    lineIndexArray[x-8].push(i);
+                    x++;                    
+                }
+                
+                //strHtml += eventName + '"';
+                strHtml += 'name="i'+ i +'" src="' + imageUrl + '" width="' + width + '" height="' + height + '" /></td>'
                 i++;
             }
             c++;
         }
     }
-    strHtml += ' <tr class="spacer"><td style="padding-bottom: 1em;x"></td></tr><tr><td bgcolor="silver" colspan="7"> Computer:<input type="text" name="comp" size="2" value="0" style="width: 50%;text-align: center;" /></td>';
-    strHtml += '<td bgcolor="silver" colspan="5">Player:<input type="text" name="plyr" size="2" value="0" style="width: 50%;text-align: center;"/></td>';
-    strHtml += '<td bgcolor="silver" colspan="3"><input type="button" value="Reset" onclick="renderGrid();init();" /></td></tr>';
     $("#dotsTable").html(strHtml);
 }

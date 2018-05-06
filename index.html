@@ -1,32 +1,64 @@
 <html lang="en">
+
 <head>
     <title>Dots Math Game</title>
     <meta charset="UTF-8" />
     <meta name="description" content="You are now playing the Dots Math Game at Math-Drills.com where a simple line segment can lead to all sorts of fun."
     />
     <meta name="keywords" content="dots,math,game,strategy,mathematics,spatial" />
-    <style>
-        @media only screen and (max-width: 1200px) {
-            #dotsTable{
-                zoom:2;            
-            }
-        }
 
+    <style>
+        /* @media only screen and (max-width: 1200px) {
+            form {
+                zoom: 2;
+            }
+        } */
+
+        input[type=text] {
+            width: 80px !important;
+            height: 20px;
+            text-align: center;
+        }
+        .form-group {
+            float: left;
+            margin-right: 10px;
+        }
     </style>
 </head>
 
 <body>
-    <h1 style="text-align: center; color: #003366;">Dots Math Game</h1>
+
     <center>
-        <form name="f" action="">
-                <table bgcolor="#ffffff" border="0" cellpadding="0" cellspacing="0" id="dotsTable">
-                </table>
+        
+        <form style="max-width:397px;" name="f" >
+        <h1 style="text-align:center;color: #003366;">Dots Math Game</h1>            
+            <div class="form-group">
+                <label for="comp">Computer:</label>
+                <input type="text" class="form-control" id="comp" value="0" name="comp">
+            </div>
+            <div class="form-group">
+                <label for="plyr">Player:</label>
+                <input type="text" class="form-control" id="plyr" value="0" name="plyr">
+            </div>
+
+            <button type="button" class="btn btn-default" onclick="renderGrid();init();">Reset</button>
+
+            <hr/>
+            <div class="alert alert-success" id="resultw">
+                <strong>Wow You win!</strong>
+            </div>
+            <div class="alert alert-danger" id="resultl">
+                <strong>Opps You loose!</strong>
+            </div>
+            <table bgcolor="#ffffff" border="0" cellpadding="0" cellspacing="0" id="dotsTable" class="table">
+            </table>
+
         </form>
-    </center>
-    <script src="js/lodash.min.js"></script>    
-    <script src="js/jquery-3.3.1.min.js"></script>
-    <script src="js/main.js"></script>
-    <script src="js/renderHtml.js"></script>
+        <center>
+            <script src="js/lodash.min.js"></script>
+            <script src="js/jquery-3.3.1.min.js"></script>
+            <script src="js/main.js"></script>
+            <script src="js/renderHtml.js"></script>
 </body>
 
 </html>
