@@ -88,6 +88,8 @@
                     $("#resultl").show();
                     //window.alert("Game Over. \n Score: Computer: " + computerTotal + ", Your: " + playerTotal + " \n You lost.")
                 }
+                document.f.comp.value = 0;
+                document.f.plyr.value = 0;
                 //init();                
                 //renderGrid();
             }
