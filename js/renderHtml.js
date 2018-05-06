@@ -22,7 +22,7 @@ var renderGrid = function () {
         }
         for (var c = 1; c <= maxTDperTR;) {
             var width = 35;
-            var height = 6;
+            var height = 8;
             var imageUrl = '/dots/images/clear.gif';
             var eventName = "convert(" + i + ");";
             var addValue = '';

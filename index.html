@@ -18,6 +18,7 @@
             width: 80px !important;
             height: 20px;
             text-align: center;
+            border: 1px solid silver;
         }
 
         .form-group {
@@ -35,6 +36,11 @@
         .alert-danger{
             background: #ea8a8a;
         }
+        td{
+            padding: 0 !important;
+            display: initial !important;
+            vertical-align: initial !important;
+        }
         
     </style>
 </head>
@@ -43,7 +49,7 @@
 
     <center>
 
-        <form style="max-width:397px;" name="f">
+        <form style="max-width:420px;" name="f">
             <h1 style="text-align:center;color: #003366;">Dots Math Game</h1>
             <div class="form-group">
                 <label for="comp">Computer:</label>
@@ -54,7 +60,7 @@
                 <input type="text" class="form-control" id="plyr" value="0" name="plyr">
             </div>
 
-            <button type="button" class="btn btn-default" onclick="renderGrid();init();">Reset</button>
+            <button type="button" style="background-color:silver;" onclick="renderGrid();init();">Reset</button>
 
             <hr/>
             <div class="alert alert-success" id="resultw">
