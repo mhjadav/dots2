@@ -1,5 +1,6 @@
 $(document).ready(function () {
     renderGrid();
+    
 });
 var gridParams = {};
 var lineIndexArray = [];
