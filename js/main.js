@@ -83,6 +83,14 @@
                 return lineIndexArray[t2].indexOf(value) > -1;
             });
             if(matched.length > 0){
+                var target = $("[name=i" + matched[0] + "]")[0];
+                if (_.includes(target.src, "blue.gif") || _.includes(target.src, "red.gif")) {
+                    $("[name=x" + t1 + "]").prop("checked", false);
+                    $("[name=x" + t2 + "]").prop("checked", false);
+                    t2 = 0;
+                    t1 = 0;
+                    return;
+                }
                 hit = 0;
                 convert(matched[0]);
                 if (!isComputerMode && hit === 0) {
