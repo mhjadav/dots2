@@ -1,4 +1,51 @@
 (function () {
+    var isComputerMode = true;
+    var currentPlayer = 1;
+
+    document.getElementById('single-player').addEventListener('click', function() {
+        isComputerMode = true;
+        this.classList.add('active');
+        document.getElementById('two-player').classList.remove('active');
+        updateLabels();
+        renderGrid();
+        init();
+    });
+
+    document.getElementById('two-player').addEventListener('click', function() {
+        isComputerMode = false;
+        this.classList.add('active');
+        document.getElementById('single-player').classList.remove('active');
+        updateLabels();
+        renderGrid();
+        init();
+    });
+
+    function updateLabels() {
+        const player1Label = document.getElementById('player1-label');
+        const player2Label = document.getElementById('player2-label');
+        
+        if (isComputerMode) {
+            player1Label.textContent = 'Computer Score';
+            player2Label.textContent = 'Player Score';
+        } else {
+            player1Label.textContent = 'Player 1 Score';
+            player2Label.textContent = 'Player 2 Score';
+        }
+    }
+
+    function updateTurnIndicator() {
+        const turnIndicator = document.getElementById('turn-indicator');
+        const currentTurnSpan = document.getElementById('current-turn');
+        
+        if (!isComputerMode) {
+            currentTurnSpan.textContent = `Player ${currentPlayer}`;
+            turnIndicator.style.backgroundColor = currentPlayer === 1 ? '#0066cc' : '#cc0000';
+            turnIndicator.style.display = 'block';
+        } else {
+            turnIndicator.style.display = 'none';
+        }
+    }
+
     var compgo = 0;
     var hit = 0;
     var t1 = 0;
@@ -15,10 +62,13 @@
         hit = 0;
         t1 = 0;
         t2 = 0;
+        currentPlayer = 1;
         box = new Array(161);
         _.fill(box, 0);
         occ = new Array(161);
         _.fill(occ, 0);
+        updateLabels();
+        updateTurnIndicator();
     }
     init()
     function dotClick(dotIndex){
@@ -33,8 +83,13 @@
                 return lineIndexArray[t2].indexOf(value) > -1;
             });
             if(matched.length > 0){
+                hit = 0;
                 convert(matched[0]);
-                console.log("Match Line", matched);
+                if (!isComputerMode && hit === 0) {
+                    currentPlayer = currentPlayer === 1 ? 2 : 1;
+                    compgo = currentPlayer === 2 ? 1 : 0;
+                    updateTurnIndicator();
+                }
             }
             $("[name=x" + t1 + "]").prop("checked", false);
             $("[name=x" + t2 + "]").prop("checked", false);
@@ -45,15 +100,22 @@
     }
     function convert(t) {
         go(parseInt(t));
-        if (compgo == 1) reply();
+        if (compgo == 1 && isComputerMode) {
+            updateTurnIndicator();
+            reply();
+        }
     }
 
     function go(t) {
         if (occ[t] != 1) {
             occ[t] = 1;
             var target = $("[name=i" + t + "]")[0];
-            if (compgo == 1) target.src = "/dots/images/blue.gif";
-            else target.src = "/dots/images/red.gif";
+            if (isComputerMode) {
+                if (compgo == 1) target.src = "/dots/images/blue.gif";
+                else target.src = "/dots/images/red.gif";
+            } else {
+                target.src = currentPlayer === 1 ? "/dots/images/blue.gif" : "/dots/images/red.gif";
+            }
             gridParams[t];
             if (gridParams[t].addValueParamsOne.length > 0) {
                 ad.apply(this, gridParams[t].addValueParamsOne);
@@ -61,8 +123,9 @@
             if (gridParams[t].addValueParamsTwo.length > 0) {
                 ad.apply(this, gridParams[t].addValueParamsTwo);
             }
-            if (compgo == 0 && hit == 0) compgo = 1;
-            hit = 0;
+            if (isComputerMode && compgo == 0 && hit == 0) {
+                compgo = 1;
+            }
         }
     }
 
@@ -70,30 +133,40 @@
         box[t] += pole;
         if (box[t] == 15) {
             var target = $("[name=i" + t + "]")[0];
-            if (compgo == 1) {
-                target.src = "/dots/images/blue.gif";
-                document.f.comp.value++;
-                hit = 1;
+            if (isComputerMode) {
+                if (compgo == 1) {
+                    target.src = "/dots/images/blue.gif";
+                    document.f.comp.value++;
+                } else {
+                    target.src = "/dots/images/red.gif";
+                    document.f.plyr.value++;
+                }
             } else {
-                target.src = "/dots/images/red.gif";
-                document.f.plyr.value++;
-                hit = 1;
+                if (currentPlayer === 1) {
+                    target.src = "/dots/images/blue.gif";
+                    document.f.comp.value++;
+                } else {
+                    target.src = "/dots/images/red.gif";
+                    document.f.plyr.value++;
+                }
             }
+            hit = 1;
+
             var computerTotal = parseInt(document.f.comp.value);
             var playerTotal = parseInt(document.f.plyr.value);
             var total = computerTotal + playerTotal;
             if (total >= 49) {
-                if (playerTotal > computerTotal) {
-                    $("#resultw").show();
-                    //window.alert("Game Over. \n Score : Computer: " + computerTotal + ", Your: " + playerTotal + " \n You won.")
+                if (isComputerMode) {
+                    if (playerTotal > computerTotal) {
+                        $("#resultw").show();
+                    } else {
+                        $("#resultl").show();
+                    }
                 } else {
-                    $("#resultl").show();
-                    //window.alert("Game Over. \n Score: Computer: " + computerTotal + ", Your: " + playerTotal + " \n You lost.")
+                    const winner = computerTotal > playerTotal ? 'Player 1' : 'Player 2';
+                    $("#resultw").text(`🎉 ${winner} Wins! 🎉`);
+                    $("#resultw").show();
                 }
-                document.f.comp.value = 0;
-                document.f.plyr.value = 0;
-                //init();                
-                //renderGrid();
             }
         }
     }
@@ -1056,4 +1129,27 @@
     }
     window.dotClick = dotClick;
     window.init = init;
+
+    const style = document.createElement('style');
+    style.textContent = `
+        .turn-indicator {
+            padding: 0.8rem 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            text-align: center;
+            color: white;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: background-color 0.3s ease;
+        }
+        
+        .turn-indicator strong {
+            font-weight: 600;
+        }
+
+        .score-wrapper {
+            margin-top: 0;
+        }
+    `;
+    document.head.appendChild(style);
 })();

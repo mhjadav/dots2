@@ -1,84 +1,256 @@
 <html lang="en">
-
-<head>
+  <head>
     <title>Dots Math Game</title>
     <meta charset="UTF-8" />
-    <meta name="description" content="You are now playing the Dots Math Game at Math-Drills.com where a simple line segment can lead to all sorts of fun."
+    <meta
+      name="description"
+      content="You are now playing the Dots Math Game at Math-Drills.com where a simple line segment can lead to all sorts of fun."
     />
-    <meta name="keywords" content="dots,math,game,strategy,mathematics,spatial" />
+    <meta
+      name="keywords"
+      content="dots,math,game,strategy,mathematics,spatial"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
 
     <style>
-        @media only screen and (max-width: 1200px) {
-            form {
-                zoom: 2;
-            }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Poppins", sans-serif;
+      }
+
+      body {
+        background-color: #f0f5ff;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+      }
+
+      form {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        max-width: 510px;
+        width: 100%;
+      }
+
+      .score-container {
+        background-color: #faf0ff;
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .score-wrapper {
+        display: flex;
+        gap: 2rem;
+        align-items: center;
+        margin: 1rem 0;
+      }
+
+      .form-group {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      label {
+        color: #666;
+        margin-bottom: 0.3rem;
+        font-size: 0.85rem;
+      }
+
+      input[type="text"] {
+        width: 70px !important;
+        height: 35px;
+        text-align: center;
+        border: 2px solid #e0e0ff;
+        border-radius: 8px;
+        font-size: 1rem;
+        color: #444;
+        background: white;
+        transition: all 0.3s ease;
+        cursor: default;
+      }
+
+      input[type="text"]:focus {
+        outline: none;
+        border-color: #b4b4ff;
+      }
+
+      button {
+        background-color: #6366f1;
+        color: white;
+        border: none;
+        padding: 0.6rem 1.2rem;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+        height: 35px;
+        margin-top: 1.5rem;
+      }
+
+      button:hover {
+        background-color: #4f46e5;
+        transform: translateY(-2px);
+      }
+
+      .alert {
+        margin-bottom: 0.8rem;
+        padding: 0.8rem;
+        border-radius: 8px;
+        text-align: center;
+        font-weight: 500;
+        font-size: 0.9rem;
+      }
+
+      .alert-success {
+        background: #e0ffed;
+        color: #2d9162;
+      }
+
+      .alert-danger {
+        background: #ffe0e0;
+        color: #c73e3e;
+      }
+
+      #dotsTable {
+        margin: 0 auto;
+        border-radius: 8px;
+        overflow: hidden;
+      }
+
+      td {
+        padding: 4px !important;
+        display: table-cell !important;
+        vertical-align: middle !important;
+      }
+
+      @media only screen and (max-width: 600px) {
+        form {
+          padding: 1rem;
         }
 
-        input[type=text] {
-            width: 80px !important;
-            height: 20px;
-            text-align: center;
-            border: 1px solid silver;
+        .score-container {
+          flex-wrap: wrap;
+          justify-content: center;
+          gap: 1rem;
         }
 
-        .form-group {
-            float: left;
-            margin-right: 10px;
+        button {
+          width: 100%;
+          margin-top: 0.5rem;
         }
+      }
 
-        .alert {
-            margin-bottom: 5px;
-            padding: 5px;
-        }
+      .game-mode-selection {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        width: 100%;
+      }
 
-        .alert-success {
-            background: #80b565;
-        }
+      .game-mode-selection button {
+        margin-top: 0;
+      }
 
-        .alert-danger {
-            background: #ea8a8a;
-        }
+      .game-mode-selection button {
+        background-color: #6366f1;
+        color: white;
+        border: none;
+        padding: 0.6rem 1.2rem;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+      }
 
-        td {
-            padding: 0 !important;
-            display: table-cell !important;
-            vertical-align: middle !important;
-        }
+      .game-mode-selection button.active {
+        background-color: #4f46e5;
+        transform: translateY(-2px);
+      }
+
+      .game-mode-selection button:not(.active) {
+        background-color: #e0e0ff;
+        color: #6366f1;
+      }
+
+      #resultw,
+      #resultl {
+        margin-top: 1rem;
+        font-size: 1rem;
+      }
     </style>
-</head>
+  </head>
 
-<body>
+  <body>
+    <form name="f">
+      <div class="score-container">
+        <div class="game-mode-selection">
+          <button type="button" onclick="renderGrid();init();">New Game</button>
+          <button type="button" id="single-player" class="active">vs Computer</button>
+          <button type="button" id="two-player">vs Player</button>
+        </div>
+        <div class="turn-indicator" id="turn-indicator" style="display: none;">
+          <strong>Current Turn: <span id="current-turn">Player 1</span></strong>
+        </div>
+        <div class="score-wrapper">
+          <div class="form-group">
+            <label for="comp" id="player1-label">Computer Score</label>
+            <input
+              type="text"
+              class="form-control"
+              id="comp"
+              value="0"
+              name="comp"
+              readonly
+            />
+          </div>
+          <div class="form-group">
+            <label for="plyr" id="player2-label">Player Score</label>
+            <input
+              type="text"
+              class="form-control"
+              id="plyr"
+              value="0"
+              name="plyr"
+              readonly
+            />
+          </div>
+        </div>
+      </div>
 
-    <center>
-        <form style="max-width:420px;" name="f">
-            <div style="background-color:silver;    text-align: center;padding: 10px;">
-            <div class="form-group">
-                <label for="comp">Computer:</label>
-                <input type="text" class="form-control" id="comp" value="0" name="comp">
-            </div>
-            <div class="form-group">
-                <label for="plyr">Player:</label>
-                <input type="text" class="form-control" id="plyr" value="0" name="plyr">
-            </div>
+      <div class="alert alert-success" id="resultw" style="display: none">
+        <strong>🎉 Congratulations! You Won! 🎉</strong>
+      </div>
+      <div class="alert alert-danger" id="resultl" style="display: none">
+        <strong>🎮 Computer Wins! Try Again! 🎮</strong>
+      </div>
 
-            <button type="button" style="background-color:#f4fbf2;" onclick="renderGrid();init();">Reset</button>
-            </div>
-            <hr/>
-            <div class="alert alert-success" id="resultw" style="display:none;">
-                <strong>Wow You win!</strong>
-            </div>
-            <div class="alert alert-danger" id="resultl" style="display:none;">
-                <strong>Opps You loose!</strong>
-            </div>
-            <table bgcolor="#ffffff" border="0" cellpadding="0" cellspacing="0" id="dotsTable">
-            </table>
+      <table
+        bgcolor="#ffffff"
+        border="0"
+        cellpadding="0"
+        cellspacing="0"
+        id="dotsTable"
+      ></table>
+    </form>
 
-        </form>
-        <center>
-            <script src="js/lodash.min.js"></script>
-            <script src="js/jquery-3.3.1.min.js"></script>
-            <script src="js/main.js"></script>
-            <script src="js/renderHtml.js"></script>
-</body>
-
+    <script src="js/lodash.min.js"></script>
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/renderHtml.js"></script>
+  </body>
 </html>

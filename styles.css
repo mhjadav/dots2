@@ -1,0 +1,18 @@
+.game-mode-selection {
+    margin-bottom: 20px;
+}
+
+.game-mode-selection button {
+    padding: 10px 20px;
+    margin: 0 10px;
+    font-size: 16px;
+    cursor: pointer;
+    border: 2px solid #333;
+    border-radius: 5px;
+    background: #fff;
+}
+
+.game-mode-selection button.active {
+    background: #333;
+    color: #fff;
+} 
