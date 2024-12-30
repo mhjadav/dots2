@@ -83,8 +83,8 @@ table {
 }
 
 td {
-  width: calc(450px / 15);
-  height: calc(450px / 15);
+  width: calc(350px / 15);
+  height: calc(350px / 15);
   padding: 2px;
 }
 
