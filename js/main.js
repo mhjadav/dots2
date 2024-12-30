@@ -145,8 +145,13 @@
   function convert(t) {
     go(parseInt(t));
     if (compgo == 1 && isComputerMode) {
-      updateTurnIndicator();
-      reply();
+        updateTurnIndicator();
+        setTimeout(() => {
+            if (hit == 1) {
+                hit = 0;
+            }
+            reply();
+        }, hit == 1 ? 500 : 0);
     }
   }
 
@@ -183,51 +188,53 @@
   function ad(t, pole) {
     box[t] += pole;
     if (box[t] == 15) {
-      var target = $("[name=i" + t + "]")[0];
+        var target = $("[name=i" + t + "]")[0];
+        target.classList.remove("blue", "red");
 
-      target.classList.remove("blue", "red");
-
-      if (isComputerMode) {
-        if (compgo == 1) {
-          target.classList.add("blue");
-          document.f.comp.value++;
-        } else {
-          target.classList.add("red");
-          document.f.plyr.value++;
-        }
-      } else {
-        if (currentPlayer === 1) {
-          target.classList.add("blue");
-          document.f.comp.value++;
-        } else {
-          target.classList.add("red");
-          document.f.plyr.value++;
-        }
-      }
-
-      hit = 1;
-
-      var computerTotal = parseInt(document.f.comp.value);
-      var playerTotal = parseInt(document.f.plyr.value);
-      var total = computerTotal + playerTotal;
-      if (total >= 49) {
         if (isComputerMode) {
-          if (playerTotal > computerTotal) {
-            $("#resultw").text(`🎉 Congratulations ${playerName}! You Won! 🎉`);
-            $("#resultw").show();
-          } else {
-            $("#resultl").text(
-              `🎮 Computer Wins! Try Again, ${playerName}! 🎮`
-            );
-            $("#resultl").show();
-          }
+            if (compgo == 1) {
+                target.classList.add("blue");
+                document.f.comp.value++;
+                hit = 1;
+                compgo = 1;  // Computer keeps turn when it scores
+            } else {
+                target.classList.add("red");
+                document.f.plyr.value++;
+                hit = 1;
+                compgo = 0;  // Player keeps turn when they score
+            }
         } else {
-          const winner =
-            computerTotal > playerTotal ? player1Name : player2Name;
-          $("#resultw").text(`🎉 ${winner} Wins! 🎉`);
-          $("#resultw").show();
+            if (currentPlayer === 1) {
+                target.classList.add("blue");
+                document.f.comp.value++;
+            } else {
+                target.classList.add("red");
+                document.f.plyr.value++;
+            }
+            hit = 1;
         }
-      }
+
+        var computerTotal = parseInt(document.f.comp.value);
+        var playerTotal = parseInt(document.f.plyr.value);
+        var total = computerTotal + playerTotal;
+        if (total >= 49) {
+            if (isComputerMode) {
+                if (playerTotal > computerTotal) {
+                    $("#resultw").text(`🎉 Congratulations ${playerName}! You Won! 🎉`);
+                    $("#resultw").show();
+                } else {
+                    $("#resultl").text(
+                        `🎮 Computer Wins! Try Again, ${playerName}! 🎮`
+                    );
+                    $("#resultl").show();
+                }
+            } else {
+                const winner =
+                    computerTotal > playerTotal ? player1Name : player2Name;
+                $("#resultw").text(`🎉 ${winner} Wins! 🎉`);
+                $("#resultw").show();
+            }
+        }
     }
   }
 
@@ -380,11 +387,22 @@
           ok = 1;
           break;
       }
-    if (ok == 1) reply();
-    else if (ok != 1 && hit == 0) reply0();
+    if (ok == 1) {
+        reply();
+    }
+    else if (ok != 1 && hit == 0) {
+        reply0();
+    }
+    else if (hit == 1) {
+        hit = 0;
+        compgo = 1;
+        setTimeout(() => {
+            reply();
+        }, 500);
+    }
     else {
-      compgo = 0;
-      hit = 0;
+        compgo = 0;
+        hit = 0;
     }
   }
 
