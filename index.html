@@ -11,9 +11,9 @@
       name="keywords"
       content="dots,math,game,strategy,mathematics,spatial"
     />
-    <meta name="theme-color" content="#6366f1"/>
-    <link rel="manifest" href="/manifest.json">
-    <link rel="apple-touch-icon" href="/icons/icon-192x192.png">
+    <meta name="theme-color" content="#6366f1" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap"
       rel="stylesheet"
@@ -29,14 +29,15 @@
 
       body {
         background-color: #f0f5ff;
-        min-height: 100vh;
-        height: 100vh;
+        max-width: 480px;
+        height: 896px;
         display: flex;
         justify-content: center;
         align-items: flex-start;
         padding: 0;
         margin: 0;
         overflow-y: auto;
+        margin: 0 auto;
       }
 
       form {
@@ -45,7 +46,8 @@
         border-radius: 15px;
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
         width: 100%;
-        max-width: 510px;
+        max-width: 480px;
+        height: 896px;
         margin: 0 auto;
       }
 
@@ -59,6 +61,7 @@
         align-items: center;
         gap: 0.8rem;
         width: 100%;
+        position: relative;
       }
 
       .score-wrapper {
@@ -186,43 +189,132 @@
         font-size: clamp(0.9rem, 2.5vw, 1rem);
       }
 
-      @media screen and (max-width: 480px) {
-        body {
-          padding: 0;
-        }
-        
-        form {
-          padding: 0.8rem;
-          border-radius: 0;
-          min-height: 100vh;
-        }
+      body {
+        padding: 0;
+      }
 
-        .score-container {
-          padding: 0.8rem;
-        }
+      form {
+        padding: 0.8rem;
+        border-radius: 0;
+      }
 
-        td {
-          padding: 1px !important;
-        }
+      .score-container {
+        padding: 0.8rem;
+      }
 
-        .game-mode-selection {
-          flex-direction: column;
-        }
+      td {
+        padding: 1px !important;
+      }
 
-        .game-mode-selection button {
-          width: 100%;
-        }
+      .game-mode-selection {
+        flex-direction: column;
+      }
+
+      .game-mode-selection button {
+        width: 100%;
+      }
+      .collapse-btn {
+        position: absolute;
+        right: 10px;
+        top: 10px;
+        width: 30px;
+        height: 30px;
+        padding: 5px;
+        border-radius: 50%;
+        background: white;
+        border: 1px solid #e0e0ff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: transform 0.3s ease;
+        margin-top: 0;
+      }
+
+      .collapse-btn svg {
+        width: 16px;
+        height: 16px;
+        fill: #6366f1;
+        stroke: #ffffff;
+      }
+
+      .collapse-btn.collapsed svg {
+        transform: rotate(-180deg);
+      }
+
+      .collapsible-content {
+        max-height: 500px;
+        width: 100%;
+        overflow: hidden;
+        transition: max-height 0.3s ease-out;
+      }
+
+      .collapsible-content.collapsed {
+        max-height: 0;
+      }
+
+      .player-name-container {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        align-items: center;
+      }
+
+      .name-inputs-wrapper {
+        display: flex;
+        gap: 1rem;
+        width: 100%;
+        justify-content: center;
+      }
+
+      .name-input-group {
+        flex: 1;
+        max-width: 200px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .name-input-group label {
+        color: #666;
+        font-size: clamp(0.75rem, 2vw, 0.85rem);
+        margin-bottom: 0;
+        white-space: nowrap;
+        min-width: 60px;
+      }
+
+      .name-input-group input {
+        flex: 1;
+        width: 100% !important;
+        max-width: none;
+        height: 35px;
+        text-align: left;
+        padding: 0 0.8rem;
+      }
+
+      .name-inputs-wrapper {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.5rem;
+      }
+
+      .name-input-group {
+        width: 100%;
+        max-width: none;
       }
     </style>
+    <link rel="stylesheet" href="styles.css" />
     <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/sw.js')
-            .then(registration => {
-              console.log('ServiceWorker registration successful');
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+          navigator.serviceWorker
+            .register("/sw.js")
+            .then((registration) => {
+              console.log("ServiceWorker registration successful");
             })
-            .catch(err => {
-              console.log('ServiceWorker registration failed: ', err);
+            .catch((err) => {
+              console.log("ServiceWorker registration failed: ", err);
             });
         });
       }
@@ -232,12 +324,62 @@
   <body>
     <form name="f">
       <div class="score-container">
-        <div class="game-mode-selection">
-          <button type="button" onclick="renderGrid();init();">New Game</button>
-          <button type="button" id="single-player" class="active">vs Computer</button>
-          <button type="button" id="two-player">vs Player</button>
+        <button
+          type="button"
+          id="toggle-controls"
+          class="collapse-btn"
+          aria-label="Toggle game controls"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            viewBox="0 0 16 16"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"
+            />
+          </svg>
+        </button>
+
+        <div id="game-controls" class="collapsible-content">
+          <div class="player-name-container">
+            <div class="name-inputs-wrapper">
+              <div class="name-input-group">
+                <label for="player1Name">Player 1</label>
+                <input
+                  type="text"
+                  id="player1Name"
+                  placeholder="Enter name"
+                  maxlength="20"
+                />
+              </div>
+              <div class="name-input-group">
+                <label for="player2Name">Player 2</label>
+                <input
+                  type="text"
+                  id="player2Name"
+                  placeholder="Enter name"
+                  maxlength="20"
+                />
+              </div>
+            </div>
+            <button type="button" id="saveNames">Save Names</button>
+          </div>
+          <div class="game-mode-selection">
+            <button type="button" onclick="renderGrid();init();">
+              New Game
+            </button>
+            <button type="button" id="single-player" class="active">
+              vs Computer
+            </button>
+            <button type="button" id="two-player">vs Player</button>
+          </div>
         </div>
-        <div class="turn-indicator" id="turn-indicator" style="display: none;">
+
+        <div class="turn-indicator" id="turn-indicator" style="display: none">
           <strong>Current Turn: <span id="current-turn">Player 1</span></strong>
         </div>
         <div class="score-wrapper">
@@ -286,5 +428,73 @@
     <script src="js/jquery-3.3.1.min.js"></script>
     <script src="js/main.js"></script>
     <script src="js/renderHtml.js"></script>
+    <script>
+      document
+        .getElementById("toggle-controls")
+        .addEventListener("click", function () {
+          const controls = document.getElementById("game-controls");
+          const button = this;
+
+          controls.classList.toggle("collapsed");
+          button.classList.toggle("collapsed");
+
+          // Store the preference
+          localStorage.setItem(
+            "controlsCollapsed",
+            controls.classList.contains("collapsed")
+          );
+        });
+
+      // Restore previous state
+      window.addEventListener("load", function () {
+        const wasCollapsed =
+          localStorage.getItem("controlsCollapsed") === "true";
+        if (wasCollapsed) {
+          const controls = document.getElementById("game-controls");
+          const button = document.getElementById("toggle-controls");
+          controls.classList.add("collapsed");
+          button.classList.add("collapsed");
+        }
+      });
+
+      document
+        .getElementById("saveNames")
+        .addEventListener("click", function () {
+          const player1Name = document
+            .getElementById("player1Name")
+            .value.trim();
+          const player2Name = document
+            .getElementById("player2Name")
+            .value.trim();
+
+          if (player1Name) {
+            document.getElementById("player1-label").textContent =
+              player1Name + "'s Score";
+          }
+          if (player2Name) {
+            document.getElementById("player2-label").textContent =
+              player2Name + "'s Score";
+          }
+
+          // Store names in localStorage
+          localStorage.setItem("player1Name", player1Name);
+          localStorage.setItem("player2Name", player2Name);
+        });
+
+      // Restore player names
+      const player1Name = localStorage.getItem("player1Name");
+      const player2Name = localStorage.getItem("player2Name");
+
+      if (player1Name) {
+        document.getElementById("player1Name").value = player1Name;
+        document.getElementById("player1-label").textContent =
+          player1Name + "'s Score";
+      }
+      if (player2Name) {
+        document.getElementById("player2Name").value = player2Name;
+        document.getElementById("player2-label").textContent =
+          player2Name + "'s Score";
+      }
+    </script>
   </body>
 </html>
